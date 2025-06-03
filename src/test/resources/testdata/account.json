@@ -1,0 +1,6 @@
+{
+  "currency": "EUR",
+  "accountNumber": "test-account",
+  "accountHolderFullName": "Test User",
+  "accountHolderPersonalId": "test-personal-id"
+}

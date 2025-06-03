@@ -12,6 +12,11 @@
         <maven.compiler.source>23</maven.compiler.source>
         <maven.compiler.target>23</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <endpoint.signup>/public/sign-up</endpoint.signup>
+        <endpoint.personaldata>/api/personal-data</endpoint.personaldata>
+        <endpoint.addfunds>/api/add-funds</endpoint.addfunds>
+        <endpoint.payments>/api/payments</endpoint.payments>
+        <endpoint.balance>/api/balance</endpoint.balance>
     </properties>
 
     <dependencies>
@@ -25,6 +30,12 @@
         <dependency>
             <groupId>io.cucumber</groupId>
             <artifactId>cucumber-junit</artifactId>
+            <version>7.14.0</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>io.cucumber</groupId>
+            <artifactId>cucumber-picocontainer</artifactId>
             <version>7.14.0</version>
             <scope>test</scope>
         </dependency>
@@ -58,13 +69,26 @@
                 <artifactId>maven-surefire-plugin</artifactId>
                 <version>3.0.0-M9</version>
                 <configuration>
-                    <includes>
-                        <include>**/*Test.java</include>
-                        <include>**/*Tests.java</include>
-                        <include>**/*TestCase.java</include>
-                    </includes>
+                    <systemPropertyVariables>
+                        <base.url>${base.url}</base.url>
+                        <endpoint.signup>${endpoint.signup}</endpoint.signup>
+                        <endpoint.personaldata>${endpoint.personaldata}</endpoint.personaldata>
+                        <endpoint.addfunds>${endpoint.addfunds}</endpoint.addfunds>
+                        <endpoint.payments>${endpoint.payments}</endpoint.payments>
+                        <endpoint.balance>${endpoint.balance}</endpoint.balance>
+                    </systemPropertyVariables>
                 </configuration>
             </plugin>
         </plugins>
     </build>
+
+
+    <profiles>
+        <profile>
+            <id>local</id>
+            <properties>
+                <base.url>http://localhost:8080</base.url>
+            </properties>
+        </profile>
+    </profiles>
 </project>

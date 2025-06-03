@@ -1,5 +1,7 @@
-package e2e;
+package e2e.steps;
 
+import e2e.utils.ApiTestUtils;
+import e2e.utils.StepContext;
 import io.cucumber.java.en.*;
 import io.restassured.filter.session.SessionFilter;
 import io.restassured.response.Response;
@@ -11,6 +13,11 @@ public class AuthenticationSteps {
     private String authToken;
     private JSONObject registrationPayload;
     private final SessionFilter sessionFilter = new SessionFilter();
+    private final StepContext context;
+
+    public AuthenticationSteps(StepContext context) {
+        this.context = context;
+    }
 
     @Given("a client registration payload exists")
     public void a_client_registration_payload_exists() {
@@ -19,7 +26,7 @@ public class AuthenticationSteps {
 
     @When("the client is registered")
     public void the_client_is_registered() {
-        String endpoint = "/public/sign-up";
+        String endpoint = System.getProperty("endpoint.signup");
         Response response = ApiTestUtils.postJson(endpoint, registrationPayload, sessionFilter);
         int status = response.getStatusCode();
         Object idObj = response.jsonPath().get("user.id");
@@ -32,8 +39,8 @@ public class AuthenticationSteps {
             authToken = response.jsonPath().getString("token");
         }
         assertTrue("Expected 200 or 201, but got: " + status, status == 200 || status == 201);
-        StepContext.setClientId(clientId);
-        StepContext.setAuthToken(authToken);
-        StepContext.setSessionFilter(sessionFilter);
+        context.setClientId(clientId);
+        context.setAuthToken(authToken);
+        context.setSessionFilter(sessionFilter);
     }
 }
